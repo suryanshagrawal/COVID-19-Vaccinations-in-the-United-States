@@ -1,0 +1,80 @@
+---
+title: "Codebook and Documentation"
+author: "Suryansh Agrawal"
+date: "11th November 2021"
+output: 
+  html_document:
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+
+### COVID-19 Vaccinations in the United States
+
+**Data source:** <a href="https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-County/8xkx-amqh">Centers for Disease Control and Prevention</a>
+
+**Dataset Owner:** NCIRD
+
+**Original data collectors:** IISInfo
+
+**Data size:** 155,078,880 bytes (155.1 MB on disk)
+
+**Special permissions:** <a href="https://www.usa.gov/government-works">Public Domain U.S. Government</a>
+
+---
+
+This is the data from the US Government which tells us about the COVID-19 count in the entire country and is also divided on the basis of state and even county. I decided to use this data set to answer a few legitimate questions that can be helpful to all of us. Secondly, this data set can also help me use most of the skills that I learnt as an enthusiastic analyst. I plan on doing all this by using visuals, maps, t-tests, grouping, and all the other known skills. I plan on answering the following questions (can come up with more): 
+
+- How has the trend been? How is the US Government working towards the Global Pandemic (that still is not over)?
+- Focusing down to the state where we live, Ohio and even Licking County, how has the status of COVID-19 changed?
+- Can visualizing the data of the COVID-19 be helpful? Will visuals of even smaller areas help us improve COVID conditions?
+
+---
+
+<a href="https://data.cdc.gov/api/views/8xkx-amqh/rows.csv?accessType=DOWNLOAD">**COVID-19_Vaccinations_in_the_United_States_County.csv**</a> 
+
+---
+
+<font size = '5'><u><center>**Codebook**</center></u></font size>
+
+| Column Name | Variable Definition | Units | Data Type | Variable Codes and definitions | Missing value codes |
+|:------|:------:|:------:|:------:|:------:|------:|
+| Date | Date data are reported on CDC COVID Data Tracker | Date | Floating Timestamp | N/A | NULL |
+| FIPS | Federal Information Processing Standard State Code | N/A | Text | Only Text | NULL |
+| MMWR_week | MMWR Week | N/A | Number | Only Numbers | NULL |
+| Recip_County | County of residence | N/A | Text | Only text | NULL |
+| Recip_State | Recipient State | N/A | Text | Only text | NULL |
+| Series_Complete_Pop_Pct | Percent of people who are fully vaccinated (have second dose of a two-dose vaccine or one dose of a single-dose vaccine) based on the jurisdiction and county where recipient lives | % | Number | Only Number | NULL | 
+| Series_Complete_Yes | Total number of people who are fully vaccinated (have second dose of a two-dose vaccine or one dose of a single-dose vaccine) based on the jurisdiction and county where recipient lives | Count | Number | Only Number | NULL | 
+| Series_Complete_12Plus | Total number of people 12+ who are fully vaccinated (have second dose of a two-dose vaccine or one dose of a single-dose vaccine) based on the jurisdiction where recipient lives | Count | Number | Only Number | NULL | 
+| Series_Complete_12PlusPop_Pct | Percent of people 12+ who are fully vaccinated (have second dose of a two-dose vaccine or one dose of a single-dose vaccine) based on the jurisdiction where recipient lives | Count | Number | Only Number | NULL | 
+| Series_Complete_18Plus | Total number of people 18+ who are fully vaccinated (have second dose of a two-dose vaccine or one dose of a single-dose vaccine) based on the jurisdiction and county where recipient lives | Count | Number | Only Number | NULL | 
+| Series_Complete_18PlusPop_Pct | Percent of people 18+ who are fully vaccinated (have second dose of a two-dose vaccine or one dose of a single-dose vaccine) based on the jurisdiction and county where recipient lives | Count | Number | Only Number | NULL | 
+| Series_Complete_65Plus | Total number of people 65+ who are fully vaccinated (have second dose of a two-dose vaccine or one dose of a single-dose vaccine) based on the jurisdiction where recipient lives | Count | Number | Only Number | NULL | 
+| Series_Complete_65PlusPop_Pct | Percent of people 65+ who are fully vaccinated (have second dose of a two-dose vaccine or one dose of a single-dose vaccine) based on the jurisdiction where recipient lives | Count | Number | Only Number | NULL | 
+| Completeness_pct | Represents the proportion of fully vaccinated people whose Federal Information Processing Standards (FIPS) code is reported and matches a valid county FIPS code in the jurisdiction. | Count | Number | Only Number | NULL | 
+| Administered_Dose1_Recip | People with at least one Dose by State of Residence | N/A | Text | Only Text | NULL |
+| Administered_Dose1_Pop_Pct | Percent of Total Pop with at least one Dose by State of Residence | N/A | Text | Only Text | NULL |
+| Administered_Dose1_Recip_12Plus | People 12+ with at least one Dose by State of Residence | N/A | Text | Only Text | NULL |
+| Administered_Dose1_Recip_12PlusPop_Pct | Percent of 12+ Pop with at least one Dose by State of Residence | N/A | Text | Only Text | NULL |
+| Administered_Dose1_Recip_18Plus | People 18+ with at least one Dose by State of Residence | N/A | Text | Only Text | NULL |
+| Administered_Dose1_Recip_18PlusPop_Pct | Percent of 18+ Pop with at least one Dose by State of Residence | N/A | Text | Only Text | NULL |
+| Administered_Dose1_Recip_65Plus | People 65+ with at least one Dose by State of Residence | N/A | Text | Only Text | NULL |
+| Administered_Dose1_Recip_65PlusPop_Pct | Percent of 65+ Pop with at least one Dose by State of Residence | N/A | Text | Only Text | NULL |
+| SVI_CTGY | SVI | N/A | Text | Only Text | NULL |
+| Series_Complete_Pop_Pct_SVI | Percent of Population Fully Vaccinated/SVI | N/A | Text | Only Text | NULL |
+| Series_Complete_12PlusPop_Pct_SVI | Percent of 12+ Pop Fully Vaccinated/SVI | N/A | Text | Only Text | NULL |
+| Series_Complete_18PlusPop_Pct_SVI | Percent of 18+ Pop Fully Vaccinated/SVI | N/A | Text | Only Text | NULL |
+| Series_Complete_65PlusPop_Pct_SVI | Percent of 65+ Pop Fully Vaccinated/SVI | N/A | Text | Only Text | NULL |
+| Metro_status | If the are is Metro/Non-metro | N/A | Text | Only Text | NULL |
+| Series_Complete_Pop_Pct_UR_Equity | Percent of Population Fully Vaccinated/MetroNon-Metro | N/A | Text | Only Text | NULL |
+| Series_Complete_12PlusPop_Pct_UR_Equity | Percent of 12+ Pop Fully Vaccinated/MetroNon-Metro | N/A | Text | Only Text | NULL |
+| Series_Complete_18PlusPop_Pct_UR_Equity | Percent of 18+ Pop Fully Vaccinated/MetroNon-Metro | N/A | Text | Only Text | NULL |
+| Series_Complete_65PlusPop_Pct_UR_Equity | Percent of 65+ Pop Fully Vaccinated/MetroNon-Metro | N/A | Text | Only Text | NULL |
+
+---
+

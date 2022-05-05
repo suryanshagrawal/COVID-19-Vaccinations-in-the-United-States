@@ -1,0 +1,200 @@
+---
+title: "Final Written Report"
+author: "Suryansh Agrawal and Utsav Sapkota"
+date: "12/3/2021"
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    code_folding: hide
+    theme: darkly
+    toc: yes
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+
+### COVID-19 Vaccinations in the United States
+
+**Data source:** <a href="https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-County/8xkx-amqh">Centers for Disease Control and Prevention</a>
+
+**Dataset Owner:** NCIRD
+
+**Original data collectors:** IISInfo
+
+**Data size:** 155,078,880 bytes (155.1 MB on disk)
+
+**Special permissions:** <a href="https://www.usa.gov/government-works">Public Domain U.S. Government</a>
+
+---
+
+#### **To download the data set (updated)** : <a href="https://data.cdc.gov/api/views/8xkx-amqh/rows.csv?accessType=DOWNLOAD&bom=true&format=true&delimiter=%3B">*Click Here*</a>
+
+#### **To view the data set in the report** : <a class="button stroke smoothscroll" href="#dataset" title="">*Click Here*</a>
+
+---
+
+```{r Reading}
+# Reading
+covid_vac <- read.csv('COVID-19_Vaccinations_in_the_United_States_County.csv')
+```
+
+```{r Library, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Installing Libraries
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(ggthemes)
+library(maps)
+library(tidymodels)
+library(GGally)
+library(ggmap)
+library(sp)
+library(rworldmap)
+library(gapminder)
+```
+
+# Introduction
+The purpose of this project is to analysis the vaccination trends in the United States. It is an effort to compare and give details about vaccinations in the United States which will eventually lead to general information of the entire country. The data set we are using is provided by <a href="https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-County/8xkx-amqh">Centers for Disease Control and Prevention</a>.
+
+We will be looking at the overall US COVID-19 Vaccine administration and vaccine equity data at county level. This data represents all vaccine partners including jurisdictional partner clinics, retail pharmacies, long-term care facilities, dialysis centers, Federal Emergency Management Agency and Health Resources and Services Administration partner sites, and federal entity facilities. 
+
+---
+
+# Ethical Consideration
+
+
+
+---
+
+# Data Explanation and Exploration
+
+## Data Explanation
+
+This data set talks about the `US COVID-19 Vaccinations` status and consists of information about people from different age groups, state they are living in, county they are living in, Federal Information Processing Standard State Code, Morbidity and Mortality Weekly Report, if the city is metro or not, Dose details, and some variables which are simple calculations of our existing variables which will be helpful in ypur analysis. 
+
+One main thing to observe about this data set is that it provides the data in the universal distribution of the age group, but also tells us about the total total percentage of the people of all age groups. Similarly, even the age group division has both, the total count and even their percentage row which makes our job easy to look at the mean, median, and quartiles in the data set for each variable.
+
+For this project, we will be focusing on some particular variables from our data set. Firstly, we will be focusing on the `Recip_State` variable because of the fact that it will be helpful for us to make a US Map which will be color coded for the percentage of vaccinated people in that particular state. Secondally, we will also be focusing on the `Recip_County` varaible because we plan on comparing all the Ohio's county to `Licking County`, the place we live in, COVID vaccination status. Another variable to focus on is `Series_Complete_Pop_Pct` because it will help us do most of our analysis because of the fact that that variable is the percentage that we will be used in most of our statistical and visual analysis. 
+
+A big fact that we want our readers to understand is that the further report will be not extremely recent and not according to the most recent data. This data set has been taken from the `Centers for Disease Control and Prevention` and the fact that they update it regularly and we downloaded the data set and working on its analysis from a particular date should be understood. It will be significant enough to generalize our findings because we will be missing on a very small information when compared to the bigger picture. Moreover, we will be adding 2 new variable from another data set which will be `latitude` and `longitude` so that we can make our maps easily. 
+
+## Visual Explanation
+
+```{r Pie}
+# Making a dataset of Licking County
+licking <- filter(covid_vac, Recip_County == 'Licking County')
+
+Mean <- c(mean(licking$Series_Complete_12PlusPop_Pct), mean(licking$Series_Complete_18PlusPop_Pct), mean(licking$Series_Complete_65PlusPop_Pct))
+Age <- c('12 Plus', '18 Plus', '65 Plus')
+
+mean_age <- data.frame(Mean, Age)
+pie(mean_age$Mean, labels = Age, main = 'Mean of vaccinated people on the basis of age')
+```
+
+Answering the questions that tells us about the variation in th vaccinations according to the age groups is one of the big steps of our analysis. Having that as a basic visual will help us move forward and we will know which age group can be focused on. 
+
+```{r histogram}
+ggplot(covid_vac, aes(x=Series_Complete_Pop_Pct)) + 
+  geom_histogram(bins = 20) + theme_economist() + 
+  labs(x = 'Percentage', y = 'Count', title = 'Percentage of people who completed the vaccination')
+```
+
+The above graph shows us how, gradually, the US government was successful in distributing the COVID-19 vaccination and how people are still in the process of getting vaccinated. This graph also shows the fact that there still is a long way to go for the entire to be vaccinated for COVID-19. The country still cannot be free from the virus until more people get vaccinated. We see a big bar in the very beginning which simply tells us how the country started with the vaccination process and there were so less people vaccinated. Later we see that the graph gradually falls with the increase in percentage which means that we still have only a few places which are around 40% vaccinated. And a handful have a more than 80% vaccination rate. 
+
+---
+
+# Statistical Analysis and Interpretation
+
+## Statistical Models
+
+```{r Correlation}
+# Correlation between 18 Plus and 65 Plus Vaccinated people
+cor(covid_vac$Series_Complete_18PlusPop_Pct, covid_vac$Series_Complete_65PlusPop_Pct)
+
+# Making a scatterplot for better visual explantion
+ggplot(covid_vac, aes(x = Series_Complete_18PlusPop_Pct, y = Series_Complete_65PlusPop_Pct)) + 
+  geom_point() + 
+  labs(title = 'Plot for 18 Plus and 65 Plus vaccinated percentage', 
+       x = '18 Plus', 
+       y = '65 Plus') +
+  theme_economist() +
+  stat_smooth(method="lm")
+
+# Correlation test for 18 Plus and 65 Plus Vaccinated people
+cor.test(covid_vac$Series_Complete_18PlusPop_Pct, covid_vac$Series_Complete_65PlusPop_Pct)
+```
+
+The correlation test suggests a strong positive relation between the 18 Plus people of the United State and the 65 Plus aged people who are vaccinated completely (have second dose of a two-dose vaccine or one dose of a single-dose vaccine based on the jurisdiction and county where recipient lives) p < 2.2e-16, t=-3423.5, df=1125758). This makes complete sense because it is likely that the US government will be vaccinating both the age groups as per the vaccination availability and also because the points on the scatter plot appear to have an upward slope. The true correlation is suggested to fall between 0.9550160 and 0.9553398, a relatively narrow range that’s pretty close to 1. The true Pearson’s correlation coefficient for these two variables was 0.95. The result is statistically significant, and it’s likely to be practically significant as well: 0.95 is a very strong positive correlation showing that 18 PLus Vaccinated and 65 Plus Vaccinated are growm together in the United States.
+
+```{r Linear Regression}
+# Linear Regression for 18 Plus and 65 Plus Vaccinated people
+regression <- linear_reg() %>%
+  set_engine('lm') %>%
+  fit(Series_Complete_18PlusPop_Pct~Series_Complete_65PlusPop_Pct, data = covid_vac)
+summary(regression$fit)
+
+# Making a scatterplot for better visual explantion
+ggplot(covid_vac, aes(x = Series_Complete_18PlusPop_Pct, y = Series_Complete_65PlusPop_Pct)) + 
+  geom_point() + 
+  labs(title = 'Plot for 18 Plus and 65 Plus vaccinated percentage', 
+       x = '18 Plus', 
+       y = '65 Plus') +
+  theme_economist() +
+  stat_smooth(method="lm")
+
+# QQ Plot 
+res <- rstandard(regression$fit)
+ggplot(, aes(sample = res)) + 
+  geom_qq() + 
+  geom_qq_line() +
+  theme_economist()
+  labs(title = 'QQ Plot of Resuidals of our Regression', 
+       y = 'Standardized Residuals', 
+       x = 'Normal Scores')
+```
+
+This linear regression model looks at the two different age groups of the United States who have been completely (have second dose of a two-dose vaccine or one dose of a single-dose vaccine, based on the jurisdiction and county where recipient lives) vaccinated, 18 Plus and 65 Plus. Like the correlation test, it suggests a positive relationship: for both the age groups the vaccination rate have been increasing by R 7.012. R2 is 0.912, suggesting that 91% of vaccination in both the age groups is similar and growing with time. While this result is statistically significant (p<2.2e-16), we also feel that this test is practically significant. It is logical that the government will provide the vaccine to both the age groups equally to deal with the devastating situation of COVID in the country. Even the plot shows that there is a positive relationship because of the line which is havong a positive slope and increase as the vaccine was available. (see the scatter plot with regression line).
+
+# EXPLAIN QQ PLOT 
+
+## Map Visuals
+
+```{r}
+usbbox <- c(left = -125, bottom = 25.75, right = -67, top = 49)
+usmap <- get_stamenmap(usbbox, zoom = 5)
+ggmap(usmap)
+
+states_map <- map_data('state')
+states <- read.csv('statelatlong.csv')
+```
+
+---
+
+<section id='dataset'>
+
+# The Dataset
+
+```{r Printing the data set}
+# The data set
+covid_vac
+```
+
+Figuring out the difference in the vaccination progress in Washington, the state with the capital of US, and, the state we all are in as of now, Ohio. 
+
+```{r}
+# Making a dataset of Ohio
+ohio <- filter(covid_vac, Recip_State == "OH")
+
+# Making a dataset of Ohio
+washington <- filter(covid_vac, Recip_State == 'WA')
+```

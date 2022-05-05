@@ -1,0 +1,51 @@
+---
+title: "Final Project Proposal"
+author: "Suryansh Agrawal"
+date: "11/19/2021"
+output: 
+  html_document:
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Team Members
+<a href="http://suryanshagrawal.com/">Suryansh Agrawal</a> - Exploring Within
+
+## Dataset 
+<a href="https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-County/8xkx-amqh">COVID-19 Vaccinations in the United States</a>
+
+## Investigation Questions
+- How has the trend been? How is the US Government working towards the Global Pandemic (that still is not over)?
+- Focusing down to the state where we live, Ohio and even Licking County, how has the status of COVID-19 changed?
+- Can visualizing the data of the COVID-19 be helpful? Will visuals of even smaller areas help us improve COVID conditions? 
+
+## Rationale Explanation
+I found a data set from the US Government which is very much up to date and keeps on updating everyday. I found this dat set to answer a few questions that can, maybe, also be helpful in a larger extent. Having this data set can help me practice a lot of the skills that we learnt in this class. I see myself using  filtering, grouping, graphics, mapping, t-testing, and a lot more stuff that can be implemented on this data set. One thing that I am excited for the most is the use of maps and I feel that implementations of maps can be a super useful skill. Bringing down the co-ordinates to licking county and analyzing it can also give answers to the COVID situation near us and can help the students on campus. 
+
+---
+
+### A glace to the data set
+
+```{r}
+# Installing Library 
+library(tidyverse)
+
+# Reading the COVID data
+covid <- read.csv("COVID-19_Vaccinations_in_the_United_States_County.csv")
+summary(covid)
+
+# Making a dataset of Ohio
+ohio <- filter(covid, Recip_State == "OH")
+summary(ohio)
+
+# Making a dataset of Licking County
+licking <- filter(ohio, Recip_County == 'Licking County')
+summary(licking)
+
+# The dataset
+covid
+```
+
